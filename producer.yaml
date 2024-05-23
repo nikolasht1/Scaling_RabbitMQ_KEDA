@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq-producer
+  namespace: dlf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq-producer
+  template:
+    metadata:
+      labels:
+        app: rabbitmq-producer
+    spec:
+      containers:
+        - name: rabbitmq-producer
+          image: nikolasht1/rabbitmq-producer-app
+          imagePullPolicy: Always
+          env:
+            - name: RABBITMQ_QUEUE_NAME
+              value: demo-queue
+            - name: RABBITMQ_URI
+              value: amqp://user:s3cr3t@rabbitmq.default.svc.cluster.local:5672

@@ -1,0 +1,20 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: rabbitmq-scaledobject
+  namespace: dlf
+spec:
+  scaleTargetRef:
+    name: rabbitmq-consumer
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  triggers:
+    - type: rabbitmq
+      metadata:
+        protocol: amqp
+        queueName: demo-queue
+        mode: QueueLength
+        value: "10"
+        hostFromEnv: RABBITMQ_URI
+
+

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq-consumer
+  namespace: dlf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq-consumer
+  template:
+    metadata:
+      labels:
+        app: rabbitmq-consumer
+    spec:
+      containers:
+        - name: rabbitmq-consumer
+          image: nikolasht1/rabbitmq-consumer-app
+          imagePullPolicy: Always
+          env:
+            - name: RABBITMQ_QUEUE_NAME
+              value: demo-queue
+            - name: RABBITMQ_URI
+              value: amqp://user:s3cr3t@rabbitmq.default.svc.cluster.local:5672
+            - name: INSTANCE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+
+

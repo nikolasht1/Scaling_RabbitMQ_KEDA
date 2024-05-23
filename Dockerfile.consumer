@@ -1,0 +1,19 @@
+FROM golang AS build
+
+WORKDIR /app
+COPY go.mod ./
+COPY go.sum ./
+
+RUN go mod download
+
+COPY consumer.go ./
+RUN CGO_ENABLED=1 go build -o /rabbitmq-go-app
+
+FROM cgr.dev/chainguard/glibc-dynamic
+WORKDIR /
+COPY --from=build /rabbitmq-go-app /rabbitmq-go-app
+EXPOSE 8080
+USER nonroot:nonroot
+ENTRYPOINT ["/rabbitmq-go-app"]
+
+
