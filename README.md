@@ -1,0 +1,1 @@
+# Scaling_RabbitMQ_KEDA
